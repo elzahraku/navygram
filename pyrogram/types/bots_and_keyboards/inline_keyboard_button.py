@@ -185,23 +185,6 @@ class InlineKeyboardButton(Object):
             )
 
         if self.url is not None:
-            style_map = {
-                "primary": 1,
-                "success": 3,
-                "danger": 2,
-            }
-            color = style_map.get(self.style) if self.style else None
-            if color is not None:
-                try:
-                    return raw.types.KeyboardButtonUrl(
-                        text=self.text,
-                        url=self.url,
-                        button_color=raw.types.ButtonColor(
-                            color=color
-                        )
-                    )
-                except Exception:
-                    pass
             return raw.types.KeyboardButtonUrl(
                 text=self.text,
                 url=self.url
