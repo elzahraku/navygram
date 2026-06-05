@@ -86,7 +86,8 @@ class InlineKeyboardButton(Object):
         switch_inline_query: str = None,
         switch_inline_query_current_chat: str = None,
         callback_game: "types.CallbackGame" = None,
-        copy_text: Optional[str] = None
+        copy_text: Optional[str] = None,
+        style: Optional[str] = None
     ):
         super().__init__()
 
@@ -101,6 +102,7 @@ class InlineKeyboardButton(Object):
         self.callback_game = callback_game
         # self.pay = pay
         self.copy_text = copy_text
+        self.style = style
 
     @staticmethod
     def read(b: "raw.base.KeyboardButton"):
@@ -183,6 +185,23 @@ class InlineKeyboardButton(Object):
             )
 
         if self.url is not None:
+            style_map = {
+                "primary": 1,
+                "success": 3,
+                "danger": 2,
+            }
+            color = style_map.get(self.style) if self.style else None
+            if color is not None:
+                try:
+                    return raw.types.KeyboardButtonUrl(
+                        text=self.text,
+                        url=self.url,
+                        button_color=raw.types.ButtonColor(
+                            color=color
+                        )
+                    )
+                except Exception:
+                    pass
             return raw.types.KeyboardButtonUrl(
                 text=self.text,
                 url=self.url
